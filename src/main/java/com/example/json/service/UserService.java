@@ -16,18 +16,17 @@ public class UserService {
     private UserProfileRepository repo;
 
     public ResponseEntity<?> create(UserProfile profile) {
-        
-        if (repo.existsById(profile.getUserId())) {
+        // existsById → existsByUserId болгох
+        if (repo.existsByUserId(profile.getUserId())) {
             return ResponseEntity.status(409).body("Profile already exists");
         }
-
         profile.setCreatedAt(LocalDateTime.now());
         profile.setUpdatedAt(LocalDateTime.now());
         return ResponseEntity.status(201).body(repo.save(profile));
     }
 
-    public Optional<UserProfile> getById(String id) {
-        return repo.findById(id);
+    public Optional<UserProfile> getById(String userId) {
+        return repo.findByUserId(userId); // ← findById биш
     }
 
     public UserProfile update(String id, UserProfile updated) {
@@ -37,6 +36,6 @@ public class UserService {
     }
 
     public void delete(String id) {
-        repo.deleteById(id);
+        repo.deleteByUserId(id); // ← deleteById биш
     }
 }
